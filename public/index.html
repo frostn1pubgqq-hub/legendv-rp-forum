@@ -93,5 +93,27 @@
   </dialog>
 
   <script src="/app.js"></script>
+
+<section id="adminPanel" hidden>
+  <h2>🛡️ Управление администраторами</h2>
+  <p>Введи точный ник зарегистрированного игрока.</p>
+
+  <input
+    id="adminUsername"
+    type="text"
+    placeholder="Ник игрока"
+    autocomplete="off"
+  />
+
+  <button id="giveAdminBtn" type="button">
+    Выдать админку
+  </button>
+
+  <button id="removeAdminBtn" type="button">
+    Снять админку
+  </button>
+
+  <p id="adminPanelMessage" role="status"></p>
+</section>
 </body>
 </html>
