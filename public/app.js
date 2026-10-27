@@ -335,3 +335,76 @@ async function init() {
 }
 
 init();
+
+async function setupAdminPanel() {
+  const panel = document.getElementById("adminPanel");
+  const usernameInput = document.getElementById("adminUsername");
+  const message = document.getElementById("adminPanelMessage");
+  const giveButton = document.getElementById("giveAdminBtn");
+  const removeButton = document.getElementById("removeAdminBtn");
+
+  if (!panel || !usernameInput || !message ||
+      !giveButton || !removeButton) return;
+
+  try {
+    const response = await fetch("/api/me");
+    const data = await response.json();
+    const user = data.user || data;
+
+    if (response.ok && user && user.role === "admin") {
+      panel.hidden = false;
+    } else {
+      return;
+    }
+  } catch {
+    return;
+  }
+
+  async function changeRole(role) {
+    const username = usernameInput.value.trim();
+
+    if (!username) {
+      message.textContent = "Введи ник игрока.";
+      return;
+    }
+
+    giveButton.disabled = true;
+    removeButton.disabled = true;
+    message.textContent = "Обрабатываем запрос...";
+
+    try {
+      const response = await fetch("/api/admin/role", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, role })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Не удалось изменить права.");
+      }
+
+      message.textContent =
+        role === "admin"
+          ? `Игрок ${result.username} теперь администратор.`
+          : `У игрока ${result.username} сняты права администратора.`;
+
+      usernameInput.value = "";
+    } catch (error) {
+      message.textContent = error.message || "Ошибка запроса.";
+    } finally {
+      giveButton.disabled = false;
+      removeButton.disabled = false;
+    }
+  }
+
+  giveButton.addEventListener("click", () => changeRole("admin"));
+  removeButton.addEventListener("click", () => changeRole("user"));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupAdminPanel);
+} else {
+  setupAdminPanel();
+}
