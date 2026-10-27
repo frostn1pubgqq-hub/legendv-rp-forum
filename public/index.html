@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100d1b">
+  <title>LegendV RP — Форум</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="logo">L</span>
+      <span>LEGENDV <b>RP</b><small>ROLEPLAY COMMUNITY</small></span>
+    </a>
+    <button id="authButton" class="button secondary">Войти</button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-tag">ОФИЦИАЛЬНОЕ СООБЩЕСТВО</div>
+    <h1>МИР <span>LEGENDV RP</span></h1>
+    <p>Твой персонаж. Твоя история. Твои правила.</p>
+    <div class="hero-actions">
+      <a href="#forum" class="button">Перейти к форуму →</a>
+      <button id="registerButton" class="button secondary">Создать аккаунт</button>
+    </div>
+  </section>
+
+  <main id="forum" class="layout">
+    <section class="main-column">
+      <div class="section-heading">
+        <div><span class="eyebrow">COMMUNITY</span><h2>Форум проекта</h2></div>
+        <button id="newTopicButton" class="button">+ Создать тему</button>
+      </div>
+      <div id="welcome" class="welcome panel">
+        Добро пожаловать на форум LegendV RP!
+      </div>
+      <div id="categories" class="categories"></div>
+      <div class="section-heading topics-heading"><h2>Последние обсуждения</h2></div>
+      <div id="topics" class="topics panel">Загрузка тем...</div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="panel status-panel">
+        <span class="eyebrow">PROJECT STATUS</span>
+        <h3><span class="status-dot"></span> Форум сообщества</h3>
+        <p>Общайся, публикуй предложения и участвуй в развитии проекта.</p>
+      </div>
+      <div class="panel">
+        <span class="eyebrow">НАЧНИ ЗДЕСЬ</span>
+        <h3>Добро пожаловать!</h3>
+        <p>Ознакомься с правилами, выбери категорию и создай свою первую тему.</p>
+      </div>
+      <div class="panel">
+        <span class="eyebrow">LEGENDV RP</span>
+        <h3>Твоя история начинается здесь</h3>
+        <p>Уважай участников и соблюдай правила сообщества.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>LEGENDV RP © 2026 · Форум игрового сообщества</footer>
+
+  <dialog id="authDialog">
+    <form id="authForm">
+      <button type="button" class="close" data-close>×</button>
+      <span class="eyebrow">АККАУНТ LEGENDV</span>
+      <h2 id="authTitle">Войти на форум</h2>
+      <label>Никнейм<input name="username" minlength="3" maxlength="24" required autocomplete="username"></label>
+      <label>Пароль<input name="password" type="password" minlength="8" required autocomplete="current-password"></label>
+      <p id="authError" class="error"></p>
+      <button class="button" type="submit">Продолжить</button>
+      <button id="switchAuth" class="text-button" type="button">Нет аккаунта? Зарегистрироваться</button>
+    </form>
+  </dialog>
+
+  <dialog id="topicDialog">
+    <form id="topicForm">
+      <button type="button" class="close" data-close>×</button>
+      <span class="eyebrow">COMMUNITY</span>
+      <h2>Новая тема</h2>
+      <label>Название<input name="title" maxlength="120" required></label>
+      <label>Раздел<select name="category" id="topicCategory" required></select></label>
+      <label>Сообщение<textarea name="body" maxlength="5000" rows="5" required></textarea></label>
+      <p id="topicError" class="error"></p>
+      <button class="button" type="submit">Опубликовать</button>
+    </form>
+  </dialog>
+
+  <dialog id="viewDialog">
+    <div id="topicView"></div>
+    <button class="button secondary" data-close>Закрыть</button>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>
