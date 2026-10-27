@@ -167,4 +167,58 @@ app.post("/api/topics/:id/pin", (req, res) => {
 app.use(express.static(path.join(__dirname, "public")));
 app.get("*", (req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
 
+
+app.post("/api/admin/role", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Нужно войти в аккаунт" });
+  }
+
+  const actor = db.prepare(
+    "SELECT id, username, role FROM users WHERE id = ?"
+  ).get(req.session.user.id);
+
+  if (!actor || actor.role !== "admin") {
+    return res.status(403).json({ error: "Нет прав" });
+  }
+
+  const owner = db.prepare(
+    "SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1"
+  ).get();
+
+  if (!owner || actor.id !== owner.id) {
+    return res.status(403).json({
+      error: "Управлять администраторами может только главный администратор"
+    });
+  }
+
+  const username = String(req.body.username || "").trim();
+  const role = req.body.role;
+
+  if (!username || !["admin", "user"].includes(role)) {
+    return res.status(400).json({ error: "Проверь ник и роль" });
+  }
+
+  const target = db.prepare(
+    "SELECT id, username FROM users WHERE username = ? COLLATE NOCASE"
+  ).get(username);
+
+  if (!target) {
+    return res.status(404).json({ error: "Пользователь не найден" });
+  }
+
+  if (target.id === actor.id && role !== "admin") {
+    return res.status(400).json({
+      error: "Нельзя снять права главного администратора"
+    });
+  }
+
+  db.prepare("UPDATE users SET role = ? WHERE id = ?")
+    .run(role, target.id);
+
+  res.json({
+    ok: true,
+    username: target.username,
+    role
+  });
+});
 app.listen(PORT, "0.0.0.0", () => console.log("LegendV RP запущен на порту " + PORT));
